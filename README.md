@@ -1,0 +1,1 @@
+Covid tracking app nextjs
