@@ -8,6 +8,7 @@ class Who extends Component {
         countries: [],
         dropdownOpen: false,
         ddTitle: "Lütfen ülke seçiniz",
+        summary:{},
         global: {},
         selectedCountryInfo: {
             Country: "Ülke bilgisi girilmedi",
@@ -23,7 +24,7 @@ class Who extends Component {
 
     componentDidMount() {
         this.getData();
-        this.getOneCountry("Global");
+        this.getSummary();
     }
 
     getData = async () => {
@@ -38,20 +39,25 @@ class Who extends Component {
         this.setState({ countries: countryList[0].sort() })
     }
 
-    getOneCountry = async (name) => {
+    getSummary = async () => {
+        await fetch(`https://api.covid19api.com/summary`).then(d => d.json())
+                .then(c => this.setState({
+                    summary: c,
+                    global: c.Global,
+                }))
+                .catch(err => console.log("Hata: ", err));
+    }
+
+    getOneCountry = name => {
+
+        const list = this.state.summary;
+
         if (name !== "Lütfen ülke seçiniz" && name != undefined) {
-            await fetch(`https://api.covid19api.com/summary`).then(d => d.json())
-                .then(c => this.setState({
-                    global: c.Global,
-                    selectedCountryInfo: c.Countries.find((selected) => selected.Country === name)
-                }))
-                .catch(err => console.log("Hata: ", err));
-        } else {
-            await fetch(`https://api.covid19api.com/summary`).then(d => d.json())
-                .then(c => this.setState({
-                    global: c.Global,
-                }))
-                .catch(err => console.log("Hata: ", err));
+
+            const selectedCountry = list != undefined ?  list.Countries.find((selected) => selected.Country === name) : {};
+            this.setState({
+                selectedCountryInfo: selectedCountry
+            });
         }
 
     }
@@ -73,7 +79,7 @@ class Who extends Component {
 
     render() {
 
-        const { countries, dropdownOpen, ddTitle, global, selectedCountryInfo } = this.state;
+        const { countries, dropdownOpen, summary, ddTitle, global, selectedCountryInfo } = this.state;
         return (
 
             <div className="div-who">
