@@ -12,17 +12,18 @@ class Who extends Component {
         selectedCountryInfo: {
             Country: "Ülke bilgisi girilmedi",
             NewConfirmed: "",
-            NewDeaths:"",
-            NewRecovered:"",
-            TotalConfirmed:"",
-            TotalDeaths:"",
-            TotalRecovered:""
+            NewDeaths: "",
+            NewRecovered: "",
+            TotalConfirmed: "",
+            TotalDeaths: "",
+            TotalRecovered: ""
 
         }
     }
 
     componentDidMount() {
         this.getData();
+        this.getOneCountry("Global");
     }
 
     getData = async () => {
@@ -45,8 +46,14 @@ class Who extends Component {
                     selectedCountryInfo: c.Countries.find((selected) => selected.Country === name)
                 }))
                 .catch(err => console.log("Hata: ", err));
+        } else {
+            await fetch(`https://api.covid19api.com/summary`).then(d => d.json())
+                .then(c => this.setState({
+                    global: c.Global,
+                }))
+                .catch(err => console.log("Hata: ", err));
         }
-        return
+
     }
 
     toggle = () => this.setState({ dropdownOpen: !this.state.dropdownOpen });
@@ -55,8 +62,8 @@ class Who extends Component {
         e.preventDefault();
 
         let choosed = e.target.innerHTML
-       
-        if (choosed === "Antarctica" ) choosed = "Antartica";
+
+        if (choosed === "Antarctica") choosed = "Antartica";
 
         this.setState({ ddTitle: choosed })
 
@@ -72,8 +79,8 @@ class Who extends Component {
             <div className="div-who">
 
                 <div className="dropdown-div">
-                    <Dropdown isOpen={dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle caret>
+                    <Dropdown isOpen={dropdownOpen} toggle={this.toggle} >
+                        <DropdownToggle color="primary" style={{ width: "100%", fontSize:"1rem" }} caret>
                             {ddTitle}
                         </DropdownToggle>
 
@@ -81,21 +88,28 @@ class Who extends Component {
                             <DropdownItem divider />
 
                             {countries.map((ulke, i) => {
-                                return <DropdownItem key={i}>{ulke}</DropdownItem>
+                                return <DropdownItem key={i} style={{ fontSize:"1rem" }} >{ulke}</DropdownItem>
                             })}
                         </DropdownMenu>
                     </Dropdown>
                 </div>
-                    <div className="result-div">
+                <div className="result-div singleCountry">
                     <div className="info country_name"><span>Country Name : </span>{selectedCountryInfo != undefined ? selectedCountryInfo.Country : "Bilgi bulunamadı"}</div>
-                    <div className="info new_confirmed"><span>New Confirmed : </span>{selectedCountryInfo != undefined ?selectedCountryInfo.NewConfirmed: ""}</div>
+                    <div className="info new_confirmed"><span>New Confirmed : </span>{selectedCountryInfo != undefined ? selectedCountryInfo.NewConfirmed : ""}</div>
                     <div className="info new_deaths"><span>New Deaths : </span>{selectedCountryInfo != undefined ? selectedCountryInfo.NewDeaths : ""}</div>
                     <div className="info new_recovered"><span>New Recovered : </span>{selectedCountryInfo != undefined ? selectedCountryInfo.NewRecovered : ""}</div>
                     <div className="info total_confirmed"><span>Total Confirmed : </span>{selectedCountryInfo != undefined ? selectedCountryInfo.TotalConfirmed : ""}</div>
                     <div className="info total_deaths"><span>Total Deaths : </span>{selectedCountryInfo != undefined ? selectedCountryInfo.TotalDeaths : ""}</div>
-                    <div className="info total_recovered"><span>TotalRecovered : </span>{selectedCountryInfo != undefined ? selectedCountryInfo.TotalRecovered : ""}</div>
-                
-
+                    <div className="info total_recovered"><span>Total Recovered : </span>{selectedCountryInfo != undefined ? selectedCountryInfo.TotalRecovered : ""}</div>
+                </div>
+                <div className="result-div global">
+                    <div className="info country_name"><span>GLOBAL</span></div>
+                    <div className="info new_confirmed"><span>New Confirmed : </span>{global != undefined ? global.NewConfirmed : ""}</div>
+                    <div className="info new_deaths"><span>New Deaths : </span>{global != undefined ? global.NewDeaths : ""}</div>
+                    <div className="info new_recovered"><span>New Recovered : </span>{global != undefined ? global.NewRecovered : ""}</div>
+                    <div className="info total_confirmed"><span>Total Confirmed : </span>{global != undefined ? global.TotalConfirmed : ""}</div>
+                    <div className="info total_deaths"><span>Total Deaths : </span>{global != undefined ? global.TotalDeaths : ""}</div>
+                    <div className="info total_recovered"><span>Total Recovered : </span>{global != undefined ? global.TotalRecovered : ""}</div>
                 </div>
             </div>
         )

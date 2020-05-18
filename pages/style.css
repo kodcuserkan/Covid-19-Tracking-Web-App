@@ -1,23 +1,23 @@
 body {
     height: 100vh;
     width: 100vw;
-    background-color: beige;
+    background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
 }
 
 .container {
     display: block;
-    background-color: rgb(243, 222, 194);
     height: 100vh;
+    min-width: 97%;
 }
 
-.title-header {
-    color: aquamarine;
+.title {
+    text-align: center;
+    color: #0269D9;
 }
 
 .main {
-    margin-top: 2rem;
-    display: grid;
-    background-color: rgb(219, 183, 253);
+    margin-top: 1rem;
+    width: 99%;
 }
 
 .div-who {
@@ -25,28 +25,62 @@ body {
 }
 
 .dropdown-div {
-    width: 50%;
+    width: 30%;
+    margin: 1rem;
 }
 
 .result-div {
     box-sizing: border-box;
-    border: 3px solid red;
+    border: 2px solid #0269D9;
+    border-radius: 10px;
     padding: 1rem 0.3rem;
-    width: 50%;
+    width: 40%;
+    margin: 1rem;
 }
 
 .div-1 {
     height: 40px;
 }
 
-.dic-2 {
+.div-2 {
     height: 100%;
-    align-items: flex-start;
 }
 
 .drop-down {
     position: absolute;
     top: 80px;
     grid-row: 2/1;
-    background-color: rgb(142, 245, 245);
+}
+
+span {
+    font-weight: bold;
+}
+
+.total_deaths span {
+    color: red;
+}
+
+.total_recovered span {
+    color: rgb(0, 173, 0);
+}
+
+@media only screen and (max-width: 600px) {
+    .div-who {
+        display: block;
+        margin-left: -1rem;
+    }
+    .dropdown-div {
+        width: 98%;
+    }
+    .result-div {
+        width: 98%;
+    }
+    .div-1 {
+        display: block;
+        word-wrap: break-word;
+        min-height: 3.5rem;
+    }
+    .div-2 {
+        margin-top: 1rem;
+    }
 }
